@@ -23,8 +23,12 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
 
         let temp = conversation
 
+        if(temp[temp.length-1][0] === "user"){
+            return
+        }
 
         temp.push(["user", query])
+        setConversation(temp)
 
         axios.post("https://gradientgpt.vercel.app/api/chat/query", 
             {
@@ -33,19 +37,22 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
             }
         )
         .then((res)=>{
-            console.log(res.data.result_text)            
+            console.log(res.data.result_text)
+
+            setQuery("")            
+            temp.push(["bot",res.data.result_text])
+            setConversation(temp)
+
+            document.getElementById('queryBox').style.height = '1rem'           
         })
         .catch((err)=>{
-            console.log(err)            
+            console.log(err)
+
+            temp.push(["bot","There seems to be an error. Could you try again?"])
+            setConversation(temp)
         })
         
-        setConversation(temp)
-        setQuery("")
         
-        temp.push(["bot","I'm fine, how are you?"])
-        setConversation(temp)
-
-        document.getElementById('queryBox').style.height = '1rem'
     }
 
     return(
@@ -114,6 +121,7 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
                 {/* Submit Button */}
                 <button 
                     onClick={(e)=>{
+
                         handleQuery(e);
                         if(window.innerWidth > 768){
                             scrollToBottom()

@@ -5,14 +5,37 @@ export default function Reply({text}){
     
     const [loadText, setloadText] = useState("")
     
+    // Function for typing animation
     async function stepType() {
-        let s = "";
-        for (let i = 0; i < text.length; i++) {
-            s += text[i];
-            setloadText(s);
-            await new Promise(resolve => setTimeout(resolve, 50));
+        let i = 0;
+        const stringResponse = String(text)
+        let intervalId=0;
+        const handleAnimationSpeed = (delay,increment) => {
+            if(intervalId!=0) clearInterval(intervalId);
+            intervalId=setInterval(() => {
+                setloadText(stringResponse.slice(0, i));                    
+                i+=increment;
+                if (i > stringResponse.length) {
+                    clearInterval(intervalId);
+                }
+            }, delay);
+        }
+        handleAnimationSpeed(5,1);
+        const handleVisibilityChange = () => {
+            if(document.hidden){
+                handleAnimationSpeed(1,190)
+            }
+            else{
+                handleAnimationSpeed(5,1)
+            }
+            };
+            document.addEventListener('visibilitychange', handleVisibilityChange)
+        return () => {
+            clearInterval(intervalId);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         }
     }
+    
     useEffect(() => {        
         stepType();
     }, [])
