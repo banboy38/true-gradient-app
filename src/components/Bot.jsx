@@ -3,33 +3,41 @@ import Reply from "./Reply";
 import Query from "./Query";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
-export default function Bot({usecase, setSidebarToggle, conversation, setConversation}){
+export default function Bot({usecase, setSidebarToggle, conversation, setConversation, conversationID, setRefresh}){
 
+    // Query state
     const [query, setQuery] = useState("")
 
-    const messagesEndRef = useRef(null)
+    // Loading state
+    const [isLoading, setIsLoading] = useState(false)
 
+    const messagesEndRef = useRef(null)
     const scrollToBottom = () => {
         setTimeout(() => {            
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
         }, 100);
     }
     
-
+    // Function to get response
     function handleQuery(e){
         e.preventDefault()
 
         let temp = conversation
 
+        // Prevent going forward if a question is already asked
         if(temp[temp.length-1][0] === "user"){
             return
         }
 
+        setIsLoading(true)
+
         temp.push(["user", query])
         setConversation(temp)
 
+        // Start generating answer
         axios.post("https://gradientgpt.vercel.app/api/chat/query", 
             {
                 userId: "670c129fa9f85c891e52b1fc",
@@ -37,19 +45,51 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
             }
         )
         .then((res)=>{
-            console.log(res.data.result_text)
+            console.log(res.data)
 
-            setQuery("")            
+            setQuery("")
             temp.push(["bot",res.data.result_text])
             setConversation(temp)
 
             document.getElementById('queryBox').style.height = '1rem'           
+            setIsLoading(false)
+            if(window.innerWidth > 768){
+                scrollToBottom()
+            }
+
+            // Register the answer to the saved conversations
+            axios.post("https://gradientgpt.vercel.app/api/savedConversations/save",
+                {
+                    conversationId: conversationID,  
+                    userId: "670c129fa9f85c891e52b1fc",  
+                    chatHistory: [
+                      {
+                        userQuery: query,
+                        apiResponse: res.data
+                      }
+                    ]
+                }
+            )
+            .then((res)=>{
+                console.log(res.data)
+                setRefresh(prev=>prev+1)             
+            })
+            .catch((err)=>{
+                console.log(err)                
+            })
+
+
         })
         .catch((err)=>{
             console.log(err)
 
             temp.push(["bot","There seems to be an error. Could you try again?"])
             setConversation(temp)
+
+            setIsLoading(false)
+            if(window.innerWidth > 768){
+                scrollToBottom()
+            }
         })
         
         
@@ -60,7 +100,7 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
             
             {/* Heading section */}
             <div className="flex flex-col px-8 md:px-14 py-[1rem] gap-0 w-[100%] ">
-                <div className=" text-2xl font-semibold">GradientGPT</div>
+                <div className=" text-lg md:text-xl font-semibold">GradientGPT</div>
                 <div className="text-xs text-gray-500">Online</div>
             </div>
 
@@ -126,9 +166,16 @@ export default function Bot({usecase, setSidebarToggle, conversation, setConvers
                         if(window.innerWidth > 768){
                             scrollToBottom()
                         }
+                        
                     }} 
-                    className="text-gray-500 hover:text-primary duration-300 ease-in-out"><IoSend size={18}
-                />
+                    className={`text-gray-500 ${isLoading?" " : ' hover:text-primary '} duration-300 ease-in-out ${isLoading?" animate-spin ":" "}`}>
+                        {
+                            isLoading
+                            ?
+                                <AiOutlineLoading3Quarters />
+                            :
+                                <IoSend size={18}/>
+                        }
                 </button>
             
             </form>
