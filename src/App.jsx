@@ -81,7 +81,7 @@ export default function App() {
   return (
     <>
       {/* Sidebar for options */}
-      <SideBar conversationID={conversationID} loadExistingConversation={loadExistingConversation} allConversations={allConversations} createNewConversation={createNewConversation} setConversation={setConversation} setusecase={setusecase} />
+      <SideBar conversationID={conversationID} loadExistingConversation={loadExistingConversation} allConversations={allConversations} createNewConversation={createNewConversation} setConversation={setConversation} />
 
       {/* Mobile View Sidebar */}
       {
