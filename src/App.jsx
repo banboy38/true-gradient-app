@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
 
-  // Conversation states 
-  const [usecase, setusecase] = useState("Usecase 1")
+  // Conversation states
   const [conversation, setConversation] = useState([["bot","Hello! I'm your Bot!"]])
   const [conversationID, setConversationID] = useState(String((new Date()).getTime()))
   const [allConversations, setAllConversations] = useState(null)
@@ -92,7 +91,7 @@ export default function App() {
       
       {/* Main div */}
       <div className="bg-gray-100 flex justify-start items-center">
-        <Main setRefresh={setRefresh} conversationID={conversationID} setSidebarToggle={setSidebarToggle} conversation={conversation} setConversation={setConversation} usecase={usecase}/>
+        <Main setRefresh={setRefresh} conversationID={conversationID} setSidebarToggle={setSidebarToggle} conversation={conversation} setConversation={setConversation}/>
       </div>
     </>
   );

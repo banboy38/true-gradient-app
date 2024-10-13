@@ -1,7 +1,7 @@
 import Bot from "./Bot";
 import { useState } from "react";
 
-export default function Main({usecase, conversation, setConversation, setSidebarToggle, conversationID, setRefresh}){
+export default function Main({conversation, setConversation, setSidebarToggle, conversationID, setRefresh}){
 
     return(
 

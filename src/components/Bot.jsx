@@ -6,7 +6,7 @@ import axios from "axios";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
-export default function Bot({usecase, setSidebarToggle, conversation, setConversation, conversationID, setRefresh}){
+export default function Bot({setSidebarToggle, conversation, setConversation, conversationID, setRefresh}){
 
     // Query state
     const [query, setQuery] = useState("")
