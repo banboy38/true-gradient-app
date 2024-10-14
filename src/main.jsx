@@ -4,6 +4,7 @@ import './index.css'
 import NavBar from './components/NavBar'
 
 import {createBrowserRouter,RouterProvider,} from "react-router-dom";
+import Admin from './Admin.jsx';
 
 const router = createBrowserRouter([
     {
@@ -14,6 +15,15 @@ const router = createBrowserRouter([
         <App/>
       </>,
     },
+
+    {
+        path: "/admin",
+        element:
+        <>
+            <NavBar/>
+            <Admin/>
+        </>
+    }
 
   ]);
 
