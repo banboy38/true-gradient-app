@@ -4,7 +4,7 @@ import AdminTab from "./components/AdminTab"
 
 export default function Admin(){
     
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState(null)
     const [savedChats, setSavedChats] = useState([])
 
     useEffect(() => {
@@ -36,15 +36,26 @@ export default function Admin(){
             </div>
 
             {/* Tabs */}
-            <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
-                {
-                    users.map((user, idx)=>{
-                        return(
-                            <AdminTab savedChats={savedChats} key={idx} user={user}/>
-                        )
-                    })
-                }
-            </div>
+            {
+                users === null
+                ?
+                    "Loading..."
+                :
+
+                users === false
+                ?
+                    "Error"
+                :
+                    <div className="flex flex-col md:flex-row flex-wrap w-full gap-4">
+                        {
+                            users.map((user, idx)=>{
+                                return(
+                                    <AdminTab savedChats={savedChats} key={idx} user={user}/>
+                                )
+                            })
+                        }
+                    </div>
+            }
 
 
 
