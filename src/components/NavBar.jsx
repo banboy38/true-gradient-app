@@ -14,7 +14,9 @@ export default function NavBar(){
                         <GoGlobe color="white"/>
                         {/* English */}
                     </div>
+
                     <div className="w-[1px] h-[2rem] bg-white"></div>
+                    
                     <div>
                         <FaUserCircle color="white"/>
                     </div>
