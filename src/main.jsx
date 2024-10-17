@@ -17,13 +17,13 @@ const router = createBrowserRouter([
     },
 
     {
-        path: "/admin",
-        element:
-        <>
-            <NavBar/>
-            <Admin/>
-        </>
-    }
+      path: "/admin",
+      element:
+      <>
+        <NavBar/>
+        <Admin/>
+      </>
+    },
 
   ]);
 
